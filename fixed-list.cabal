@@ -2,6 +2,7 @@ Name:                fixed-list
 Version:             0.1.0
 Author:              Job Vranish
 Maintainer:          jvranish@gmail.com
+Homepage:            http://github.com/jvranish/FixedList/tree/master
 License:             BSD3
 License-file:        LICENSE
 category:            Data
