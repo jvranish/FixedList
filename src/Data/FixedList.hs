@@ -50,6 +50,8 @@ I think that if Haskell supported infinite types my 'Append' typeclass would onl
 
 I think I could also implement direct, typesafe, versions of 'last', 'init', 'reverse' and 'length' that don't depend on 'Foldable'. *sigh*  Maybe Haskell will one day support such things.
 
+This library is hosted on github (click on the /Contents/ link above and you should see the Homepage link) so it should be very easy to forked it, patch it,  and send patches back to me.
+
 -}
 module Data.FixedList ( Cons(..)
                       , Nil(..)
