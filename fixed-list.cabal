@@ -1,0 +1,19 @@
+Name:                fixed-list
+Version:             0.1.0
+Author:              Job Vranish
+Maintainer:          jvranish@gmail.com
+License:             BSD3
+License-file:        LICENSE
+category:            Data
+Synopsis:            A fixed length list type
+Description:         A fixed length list type that encodes it's length in it's type in a natural way, and is a member of Applicative, Functor, Foldable, Traversable, and Monad.
+
+Build-Type:          Simple
+Cabal-Version:       >= 1.2.0
+
+library
+    exposed-modules: Data.FixedList
+    build-depends:	base >= 4 && < 5
+    hs-source-dirs: src/
+    ghc-options:	-Wall
+
