@@ -16,7 +16,7 @@ be easily removed if needed).
 
 Most of your usual list functions ('foldr', 'fmap', 'sum', 'sequence', etc..)
 are accessed via the 'Functor', 'Applicative', 'Foldable', and 'Traversable'
-instances.
+type classes.
 
 The Equivalent of zipWith can be had via the Applicative instance:
 
@@ -38,18 +38,21 @@ This also means that 'join' gets the diagonal of a FixedList of FixedLists.
 
 You can construct FixedLists like so:
 
-> t1 :: Cons (Cons (Cons Nil)) Integer
+> t1 :: Cons (Cons (Cons Nil)) Integer -- this is the same as FixedList3 Integer
 > t1 = 1 :. 3 :. 5 :. Nil
 >
-> t2 :: Cons (Cons (Cons Nil)) Integer  -- type signature needed! and must be correct!
+> t2 :: FixedList3 Integer  -- type signature needed! and must be correct!
 > t2 = fromFoldable' [4, 1, 0]
 >
-> t3 :: Cons (Cons (Cons Nil)) (Cons (Cons (Cons Nil)) Integer)
-> t3 = t1 :. t1 :. t2 :. Nil
+> t3 :: FixedList3 Integer -- type signature needed!
+> t3 :: fromFoldable' [1..]
 >
-> -- get the sum of the diagonal of the transpose of t3
-> test :: Cons (Cons (Cons Nil)) Integer
-> test = sum $ join $ sequenceA $ t3
+> t4 :: FixedList3 (FixedList3 Integer)
+> t4 = t1 :. t2 :. t3 :. Nil
+>
+> -- get the sum of the diagonal of the transpose of t4
+> test :: FixedList3 Integer
+> test = sum $ join $ sequenceA $ t4
 
 If you want to restrict a type to be a 'FixedList', but don't want to specify the
 size of the list, use the 'FixedList' typeclass:
@@ -64,9 +67,9 @@ I think I could also implement direct, typesafe, versions of 'last', 'init', 're
 and 'length' that don't depend on 'Foldable'. *sigh*  Maybe Haskell will one day
 support such things.
 
-This library is hosted on github (click on the /Contents/ link above and you should
-see the Homepage link) so it should be very easy to forked it, patch it, and send
-patches back to me.
+This library is hosted on github (click on the /Contents/ (if you are viewing this
+on hackage) link above and you should see the Homepage link) so it should be very
+easy to forked it, patch it, and send patches back to me.
 
 -}
 module Data.FixedList (
