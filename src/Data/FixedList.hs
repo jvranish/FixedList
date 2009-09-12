@@ -69,10 +69,13 @@ see the Homepage link) so it should be very easy to forked it, patch it, and sen
 patches back to me.
 
 -}
-module Data.FixedList ( Cons(..)
+module Data.FixedList (
+                      -- * Types and Classes
+                        Cons(..)
                       , Nil(..)
                       , FixedList
                       , Append (..)
+                      -- * Baisc Functions that are not found in 'Traversable' or 'Foldable'
                       , reverse
                       , length
                       , last
@@ -80,6 +83,14 @@ module Data.FixedList ( Cons(..)
                       , unit
                       , fromFoldable
                       , fromFoldable'
+                      -- * Type synonyms for larger lists
+                      , FixedList0, FixedList1, FixedList2, FixedList3, FixedList4
+                      , FixedList5, FixedList6, FixedList7, FixedList8, FixedList9
+                      , FixedList10, FixedList11, FixedList12, FixedList13, FixedList14
+                      , FixedList15, FixedList16, FixedList17, FixedList18, FixedList19
+                      , FixedList20, FixedList21, FixedList22, FixedList23, FixedList24
+                      , FixedList25, FixedList26, FixedList27, FixedList28, FixedList29
+                      , FixedList30, FixedList31, FixedList32
                       ) where
 
 import Control.Applicative
@@ -89,7 +100,7 @@ import Data.Traversable
 import Data.Monoid
 import Data.Maybe
 
-import Prelude hiding (head, tail, (++), foldr, sum, sequence, reverse, length, last, init)
+import Prelude hiding (head, tail, foldr, sum, sequence, reverse, length, last, init)
 import qualified Prelude
 
 data (FixedList f) =>
@@ -102,10 +113,9 @@ data Nil a = Nil
   deriving (Eq, Ord)
 
 infixr 5 :.
-infixr 5  ++
 
 instance (FixedList f, Show a) => Show (Cons f a) where
-  show x = "|" Prelude.++ show (toList x) Prelude.++ "|"
+  show x = "|" ++ show (toList x) ++ "|"
 instance Show (Nil a) where
   show Nil = "|[]|"
 
@@ -117,11 +127,11 @@ instance FixedList Nil
 
 -- The only very bad ugly, everything else is haskell98
 class Append f g h | f g -> h, f h -> g where
-  (++) :: f a -> g a -> h a
+  append :: f a -> g a -> h a
 instance (FixedList f, FixedList c, Append f b c) => Append (Cons f) b (Cons c) where
-  (x :. xs) ++ ys = x :. (xs ++ ys)
+  append (x :. xs) ys = x :. (xs `append` ys)
 instance Append Nil a a where
-  Nil ++ ys = ys
+  append Nil ys = ys
 
 
 reverse :: (FixedList t) => t a -> t a
@@ -191,4 +201,37 @@ instance Applicative Nil where
   pure = return
   (<*>) = ap
 
+type FixedList0 = Nil
+type FixedList1 = Cons FixedList0
+type FixedList2 = Cons FixedList1
+type FixedList3 = Cons FixedList2
+type FixedList4 = Cons FixedList3
+type FixedList5 = Cons FixedList4
+type FixedList6 = Cons FixedList5
+type FixedList7 = Cons FixedList6
+type FixedList8 = Cons FixedList7
+type FixedList9 = Cons FixedList8
+type FixedList10 = Cons FixedList9
+type FixedList11 = Cons FixedList10
+type FixedList12 = Cons FixedList11
+type FixedList13 = Cons FixedList12
+type FixedList14 = Cons FixedList13
+type FixedList15 = Cons FixedList14
+type FixedList16 = Cons FixedList15
+type FixedList17 = Cons FixedList16
+type FixedList18 = Cons FixedList17
+type FixedList19 = Cons FixedList18
+type FixedList20 = Cons FixedList19
+type FixedList21 = Cons FixedList20
+type FixedList22 = Cons FixedList21
+type FixedList23 = Cons FixedList22
+type FixedList24 = Cons FixedList23
+type FixedList25 = Cons FixedList24
+type FixedList26 = Cons FixedList25
+type FixedList27 = Cons FixedList26
+type FixedList28 = Cons FixedList27
+type FixedList29 = Cons FixedList28
+type FixedList30 = Cons FixedList29
+type FixedList31 = Cons FixedList30
+type FixedList32 = Cons FixedList31
 
