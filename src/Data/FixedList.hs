@@ -57,7 +57,7 @@ You can construct FixedLists like so:
 If you want to restrict a type to be a 'FixedList', but don't want to specify the
 size of the list, use the 'FixedList' typeclass:
 
-> myFunction :: (FixedList t) => t -> Float
+> myFunction :: (FixedList f) => f a -> Float
 
 On a side note...
 I think that if Haskell supported infinite types my 'Append' typeclass would
