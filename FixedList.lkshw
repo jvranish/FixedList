@@ -1,0 +1,10 @@
+Version of workspace file format:
+               1
+Time of storage:
+               "Sat Mar 20 11:29:40 EDT 2010"
+Name of the workspace:
+               "FixedList"
+File paths of contained packages:
+               ["fixed-list.cabal"]
+Maybe file path of an active package:
+               Just "fixed-list.cabal"

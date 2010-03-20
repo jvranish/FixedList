@@ -5,7 +5,7 @@
 {- |
 A fixed length list library.
 
-The length of a list is encoded into it's type in a natural way. This allows
+The length of a list is encoded into its type in a natural way. This allows
 you to do things like specify that two list parameters have the same type,
 which also forces them to have the same length. This can be a handy property.
 It's not as flexible as the standard haskell list, but the added type safety is
