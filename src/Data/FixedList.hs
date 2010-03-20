@@ -160,8 +160,11 @@ unit a = a :. Nil
 
 -- | Given a list, returns a list of copies of that list but each with an element removed.
 --   for example:
+--
 --  > subLists (1:. 2:. 3:. Nil)
---  gives
+--
+--  gives:
+--
 --  > |[|[2,3]|,|[1,3]|,|[1,2]|]|
 --
 subLists :: FixedList f => Cons f a -> Cons f (f a)
