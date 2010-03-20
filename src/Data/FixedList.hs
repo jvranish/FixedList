@@ -84,6 +84,7 @@ module Data.FixedList (
                       , last
                       , init
                       , unit
+                      , subLists
                       , fromFoldable
                       , fromFoldable'
                       -- * Type synonyms for larger lists
@@ -103,10 +104,10 @@ import Data.Traversable
 import Data.Monoid
 import Data.Maybe
 
+import qualified Data.List
 import Prelude hiding (head, tail, foldr, sum, sequence, reverse, length, last, init)
-import qualified Prelude
 
-data (FixedList f) =>
+data FixedList f =>
   Cons f a = (:.) {
     head :: a,
     tail :: (f a)
@@ -125,7 +126,7 @@ instance Show (Nil a) where
 -- | Just a restrictive typeclass. It makes sure ':.' only takes FixedLists as it's second parameter
 --  and makes sure the use of fromFoldable's in reverse, and init is safe.
 class (Applicative f, Traversable f, Monad f) => FixedList f
-instance (FixedList f) => FixedList (Cons f)
+instance FixedList f => FixedList (Cons f)
 instance FixedList Nil
 
 -- The only very bad ugly, everything else is haskell98
@@ -137,51 +138,64 @@ instance Append Nil a a where
   append Nil ys = ys
 
 
-reverse :: (FixedList t) => t a -> t a
-reverse xs = fromFoldable' $ Prelude.reverse $ toList xs
+reverse :: FixedList t => t a -> t a
+reverse xs = fromFoldable' $ Data.List.reverse $ toList xs
 
-length :: (Foldable t) => t a -> Int
-length xs = Prelude.length $ toList xs
+length :: Foldable t => t a -> Int
+length xs = Data.List.length $ toList xs
 
 -- | Returns the last element of the list
-last :: (Foldable t) => t a -> a
-last xs = Prelude.last $ toList xs
+last :: Foldable t => t a -> a
+last xs = Data.List.last $ toList xs
 
 -- | Returns all but the last element of the list
-init :: (FixedList f) => Cons f a -> f a
-init xs = fromFoldable' $ Prelude.init $ toList xs
+init :: FixedList f => Cons f a -> f a
+init xs = fromFoldable' $ Data.List.init $ toList xs
 
--- | Constructs a FixedList containing a single element
+-- | Constructs a FixedList containing a single element.
+--   Normally I would just use pure or return for this,
+--   but you'd have to specify a type signature in that case.
 unit :: a -> Cons Nil a
 unit a = a :. Nil
+
+-- | Given a list, returns a list of copies of that list but each with an element removed.
+--   for example:
+--  > subLists (1:. 2:. 3:. Nil)
+--  gives
+--  > |[|[2,3]|,|[1,3]|,|[1,2]|]|
+--
+subLists :: FixedList f => Cons f a -> Cons f (f a)
+subLists xs = fromFoldable' $ fmap fromFoldable' $ subLists' $ toList xs
+  where
+    subLists' a = zipWith (++) (Data.List.inits a) ( Data.List.tail $ Data.List.tails a)
 
 -- | Converts any Foldable to any Applicative Traversable.
 --   However, this will only do what you want if 'pure' gives you the
 --   shape of structure you are expecting.
 fromFoldable :: (Foldable f, Applicative g, Traversable g) => f a -> Maybe (g a)
-fromFoldable t = sequenceA $ snd $ mapAccumL f (toList t) (pure undefined)
+fromFoldable t = sequenceA $ snd $ mapAccumL f (toList t) (pure ())
   where
     f [] _ = ([], Nothing)
     f (x:xs) _ = (xs, Just x)
 
--- | This can crash if the foldable is smaller than the new structure
+-- | This can crash if the foldable is smaller than the new structure.
 fromFoldable' :: (Foldable f, Applicative g, Traversable g) => f a -> g a
 fromFoldable' a = fromJust $ fromFoldable a
 
-instance (FixedList f) => Functor (Cons f) where
-  fmap f (a :. b) = (f a) :. (fmap f b)
+instance FixedList f => Functor (Cons f) where
+  fmap f (a :. b) = f a :. fmap f b
 
-instance (FixedList f) => Foldable (Cons f) where
+instance FixedList f => Foldable (Cons f) where
   foldMap f (a :. b) = f a `mappend` foldMap f b
 
-instance (FixedList f) => Traversable (Cons f) where
+instance FixedList f => Traversable (Cons f) where
   traverse f (a :. b) = (:.) <$> f a <*> traverse f b
 
-instance (FixedList f) => Monad (Cons f) where
-  return x = x :. (return x)
-  (a :. b) >>= k = (head $ k a) :. (b >>= (tail . k))
+instance FixedList f => Monad (Cons f) where
+  return x = x :. return x
+  (a :. b) >>= k = head (k a) :. (b >>= (tail . k))
 
-instance (FixedList f) => Applicative (Cons f) where
+instance FixedList f => Applicative (Cons f) where
   pure = return
   (<*>) = ap
 
@@ -197,12 +211,26 @@ instance Traversable Nil where
 
 instance Monad Nil where
   return _  = Nil
-  Nil >>= _ = Nil -- should I define this as _ >>= _ = Nil ? wouldn't
-                  -- have the right behavior with bottom
+  Nil >>= _ = Nil -- should I define this as _ >>= _ = Nil ? would this
+                  -- have the right behavior with bottom?
 
 instance Applicative Nil where
   pure = return
   (<*>) = ap
+
+instance (Num a, FixedList f, Eq (f a), Show (f a)) => Num (Cons f a) where
+  a + b = pure (+) <*> a <*> b
+  a - b = pure (-) <*> a <*> b
+  a * b = pure (*) <*> a <*> b
+  negate a = pure negate <*> a
+  abs a = pure abs <*> a
+  signum = fmap signum
+  fromInteger = pure . fromInteger
+
+instance (Fractional a, FixedList f, Eq (f a), Show (f a)) => Fractional (Cons f a) where
+  a / b = pure (/) <*> a <*> b
+  recip a = pure 1 / a
+  fromRational = pure . fromRational
 
 type FixedList0 = Nil
 type FixedList1 = Cons FixedList0
