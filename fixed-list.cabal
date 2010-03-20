@@ -1,7 +1,7 @@
 Name:                fixed-list
-Version:             0.1.4
+Version:             0.1.5
 Author:              Job Vranish
-Maintainer:          jvranish@gmail.com
+Maintainer:          job.vranish@gmail.com
 Homepage:            http://github.com/jvranish/FixedList/tree/master
 License:             BSD3
 License-file:        LICENSE
@@ -27,5 +27,5 @@ source-repository this
   type:     git
   branch:   master
   location: git@github.com:jvranish/FixedList.git
-  tag:      0.1.4
+  tag:      0.1.5
 
