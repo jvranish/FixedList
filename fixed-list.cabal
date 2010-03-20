@@ -1,5 +1,5 @@
 Name:                fixed-list
-Version:             0.1.3
+Version:             0.1.4
 Author:              Job Vranish
 Maintainer:          jvranish@gmail.com
 Homepage:            http://github.com/jvranish/FixedList/tree/master
@@ -10,7 +10,7 @@ Synopsis:            A fixed length list type
 Description:         A fixed length list type that encodes its length in its type in a natural way, and is a member of Applicative, Functor, Foldable, Traversable, and Monad.
 
 Build-Type:          Simple
-Cabal-Version:       >= 1.2.0
+Cabal-Version:       >= 1.6.0
 
 library
     exposed-modules: Data.FixedList
@@ -27,5 +27,5 @@ source-repository this
   type:     git
   branch:   master
   location: git@github.com:jvranish/FixedList.git
-  tag:      0.1.3
+  tag:      0.1.4
 
