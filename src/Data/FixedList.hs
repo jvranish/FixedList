@@ -99,7 +99,7 @@ module Data.FixedList (
 
 import Control.Applicative
 import Control.Monad hiding (sequence) --hiding for haddock
-import Data.Foldable
+import Data.Foldable hiding (length)
 import Data.Traversable
 import Data.Monoid
 import Data.Maybe
