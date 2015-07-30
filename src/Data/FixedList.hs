@@ -73,12 +73,12 @@ easy to forked it, patch it, and send patches back to me.
 
 -}
 module Data.FixedList (
-                      -- * Types and Classes
+                      -- * Types and classes
                         Cons(..)
                       , Nil(..)
                       , FixedList
                       , Append (..)
-                      -- * Baisc Functions that are not found in 'Traversable' or 'Foldable'
+                      -- * Basic functions not found in 'Traversable' or 'Foldable'
                       , reverse
                       , length
                       , last
